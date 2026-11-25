@@ -32,9 +32,9 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t flaskapp .
-        
 
-              - name: Login to Docker Hub
+
+      - name: Login to Docker Hub
         if: github.event_name == 'push'
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
