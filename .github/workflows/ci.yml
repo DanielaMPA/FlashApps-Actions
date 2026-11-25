@@ -32,3 +32,20 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t flaskapp .
+        
+
+              - name: Login to Docker Hub
+        if: github.event_name == 'push'
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+      - name: Push Docker image
+        if: github.event_name == 'push'
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        run: |
+          docker tag flaskapp "$DOCKER_USERNAME/flaskapp:latest"
+          docker push "$DOCKER_USERNAME/flaskapp:latest"
